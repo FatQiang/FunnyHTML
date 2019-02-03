@@ -1,0 +1,104 @@
+﻿<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <script src="https://apps.bdimg.com/libs/jquery/1.10.2/jquery.min.js"></script>
+    <style>
+
+        * {
+            top:0px;
+            left:0px;
+            margin:0px;
+            padding:0px;
+        }
+
+        .doge {
+            height:200px;
+            width:400px;
+            display:block;
+            position:absolute;
+            background-repeat:no-repeat;
+        }
+    </style>
+<link rel="shortcut icon" href="DOGE.ico" />
+</head>
+<body style="overflow:hidden" onload="load()">
+
+    <audio id="audioMain" autoplay="autoplay" controls="controls" loop="loop" preload="auto"  src="Audio\Dragonborn.mp3" style="display:none">
+    </audio>
+
+
+    <div id="mainDiv" style="width:100%;height:100%"></div>
+
+    <script type="text/javascript">
+
+       var cHeigth= document.documentElement.clientHeight;
+       var cWidth = document.documentElement.clientWidth-57;
+
+        var dogeCount = 1;
+        //第一个狗从屏幕中间出来
+        createDoge(cHeigth / 2);
+
+        //随机产生doge
+        var mainTimer = null;
+        mainTimer = setInterval(
+            function () {
+                //每次5只
+                for (var i = 0; i < 2; i++) {
+                    //随机产生高度
+                    var rand = Math.random();
+                    var dogeTop = Math.round(rand * (cHeigth-250));
+
+                    createDoge(dogeTop);
+                }
+            },
+            500
+            );
+
+        function createDoge(dogeTop) {
+
+            var doge = document.createElement("div");
+            doge.setAttribute("id", "doge" + dogeCount);
+            doge.setAttribute("class", "doge");
+            doge.style.top = dogeTop + "px";
+            doge.style.left = cWidth + "px";
+
+            var i = 1;
+            var rand = Math.random();
+            i = Math.round(1 + rand * 7);
+            //
+           // background-image:url(DOGE.gif);
+            doge.style.backgroundImage = "url(Image/DOGE" + i + ".gif)";
+            document.getElementById("mainDiv").appendChild(doge);
+
+            //随机产生速度
+            var rand = Math.random();
+            var dogeSpeed = Math.round(rand * 10);
+            dogeCount++;
+            move(doge, dogeSpeed);
+        }
+
+        function move(dogeDiv,speed) {
+            //定时器
+            var timer = null;
+            timer = setInterval(
+                function () {
+
+                    var dogeLeft = dogeDiv.offsetLeft;
+                    if (dogeLeft < -67) {//移除屏幕外后，删除该div
+                        dogeDiv.remove();
+                        clearInterval(timer);
+                    }
+                    dogeLeft -= speed;
+                    dogeDiv.style.left = dogeLeft + "px";
+
+                }, 100
+                );
+        }
+
+        function load() {
+            $("#audioMain")[0].play();
+        }
+    </script>
+</body>
+</html>
